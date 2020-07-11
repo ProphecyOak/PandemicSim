@@ -71,14 +71,13 @@ class Scene:
     def movement(self, times=1, mode=0):
         if mode == 0:
             for x in self.pplList:
-                magnitude = 10#random.randint(0,30)
-                randList = [x for x in range(-20,-15)]+[y for y in range(15,20)]
-                #angle = radians(x.lastMove[1]+random.choice(randList))
-                angle = [radians(random.randint(0,360)), x.lastMove[1]]
-                coords = vectorToCoords(magnitude, angle[random.randint(0,1)], self, x)
+                magnitude = 10
+                angle = [radians(random.randint(0,360)), x.lastMove[1], x.lastMove[1], x.lastMove[1], x.lastMove[1], x.lastMove[1]]
+                coords = vectorToCoords(magnitude, random.choice(angle), self, x)
                 self.canvas.move(x.dot, *coords)
                 x.lastMove = coords
             print(degrees(self.pplList[0].lastMove[1])%360)
+
     def changeMoving(self):
         self.moving = [1,0][self.moving]
         self.moveChange.config(text=["Start","Stop"][self.moving])
