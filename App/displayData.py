@@ -8,20 +8,20 @@ normalDist = numpy.random.normal
 def vectorToCoords(magnitude, angle, scene, dot):
     curCoords = scene.canvas.coords(dot.dot)
     deltCoords = []
-    if curCoords[0] < magnitude:
-        deltCoords.append(10)
-    elif curCoords[0] > scene.width-magnitude:
-        deltCoords.append(-10)
+    if curCoords[0] < 20:
+        deltCoords.append(magnitude)
+    elif curCoords[0] > scene.width-20:
+        deltCoords.append(-magnitude)
     else:
         deltCoords.append(magnitude*cos(angle))
-    if curCoords[1] < magnitude:
-        deltCoords.append(10)
-    elif curCoords[1] > scene.height-magnitude:
+    if curCoords[1] < 20:
+        deltCoords.append(magnitude)
+    elif curCoords[1] > scene.height-20:
         deltCoords.append(-magnitude)
     else:
         deltCoords.append(magnitude*sin(angle))
-    scene.canvas.create_line(*curCoords,deltCoords[0]+curCoords[0],
-        deltCoords[1]+curCoords[1],fill=dot.color)
+    scene.canvas.create_line(curCoords[0]+5, curCoords[1]+5,deltCoords[0]+curCoords[0]+5,
+        deltCoords[1]+curCoords[1]+5,fill=dot.color)
     return deltCoords
 
 class Person:
@@ -52,9 +52,12 @@ class Scene:
         self.closer.grid(column=2)
         self.mover = tkinter.Button(self.master, text="Move", command=self.movement)
         self.mover.grid(column=2)
-        self.canvas.grid()
+        self.moveChange = tkinter.Button(self.master, text="Start", command=self.changeMoving)
+        self.moveChange.grid(column=2)
+        self.canvas.grid(row=0, rowspan=height//10)
         self.pplCount = pplCount
         self.pplListMaker()
+        self.moving = 0
         #self.master.mainloop()
 
     def pplListMaker(self):
@@ -67,7 +70,13 @@ class Scene:
         if mode == 0:
             for x in self.pplList:
                 magnitude = 10#random.randint(0,30)
+                randList = [x for x in range(-20,-15)]+[y for y in range(15,20)]
+                #angle = radians(x.lastMove[1]+random.choice(randList))
                 angle = radians(random.randint(0,360))
                 coords = vectorToCoords(magnitude, angle, self, x)
                 self.canvas.move(x.dot, *coords)
                 x.lastMove = coords
+            print(degrees(self.pplList[0].lastMove[1])%360)
+    def changeMoving(self):
+        self.moving = [1,0][self.moving]
+        self.moveChange.config(text=["Start","Stop"][self.moving])
