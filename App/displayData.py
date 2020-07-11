@@ -38,27 +38,29 @@ class Person:
 
 class Scene:
     def __init__(self, width=500, height=500, pplCount=50):
-        self.master = tkinter.Tk()
         if width < 50:
             width = 50
         self.width = width
         if height < 50:
             height = 50
+
         self.height = height
-        self.canvas = tkinter.Canvas(self.master, width=width, height=height)
-        self.reseter = tkinter.Button(self.master, text="Reset", command=self.pplListMaker)
-        self.reseter.grid(column=2)
-        self.closer = tkinter.Button(self.master, text="Close", command=self.master.destroy)
-        self.closer.grid(column=2)
-        self.mover = tkinter.Button(self.master, text="Move", command=self.movement)
-        self.mover.grid(column=2)
-        self.moveChange = tkinter.Button(self.master, text="Start", command=self.changeMoving)
-        self.moveChange.grid(column=2)
-        self.canvas.grid(row=0, rowspan=height//10)
         self.pplCount = pplCount
-        self.pplListMaker()
         self.moving = 0
-        #self.master.mainloop()
+        self.master = tkinter.Tk()
+
+        self.canvas = tkinter.Canvas(self.master, width=width, height=height)
+        self.canvas.grid(rowspan=height//10)
+        self.mover = tkinter.Button(self.master, text="Move", command=self.movement)
+        self.mover.grid(row=0,column=2)
+        self.moveChange = tkinter.Button(self.master, text="Start", command=self.changeMoving)
+        self.moveChange.grid(row=1,column=2)
+        self.reseter = tkinter.Button(self.master, text="Reset", command=self.pplListMaker)
+        self.reseter.grid(row=2,column=2)
+        self.closer = tkinter.Button(self.master, text="Close", command=self.master.destroy)
+        self.closer.grid(row=3,column=2)
+
+        self.pplListMaker()
 
     def pplListMaker(self):
         self.canvas.delete("all")
@@ -72,8 +74,8 @@ class Scene:
                 magnitude = 10#random.randint(0,30)
                 randList = [x for x in range(-20,-15)]+[y for y in range(15,20)]
                 #angle = radians(x.lastMove[1]+random.choice(randList))
-                angle = radians(random.randint(0,360))
-                coords = vectorToCoords(magnitude, angle, self, x)
+                angle = [radians(random.randint(0,360)), x.lastMove[1]]
+                coords = vectorToCoords(magnitude, angle[random.randint(0,1)], self, x)
                 self.canvas.move(x.dot, *coords)
                 x.lastMove = coords
             print(degrees(self.pplList[0].lastMove[1])%360)
