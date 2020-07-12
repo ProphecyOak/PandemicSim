@@ -6,7 +6,7 @@ import random
 
 
 class Scene:
-    def __init__(self, width=500, height=500, pplCount=50,socialDist=0):
+    def __init__(self, width=500, height=500, pplCount=50, socialDist=0, socialStrict=8):
         if width < 50:
             width = 50
         self.width = width
@@ -16,6 +16,7 @@ class Scene:
 
         self.pplCount = pplCount
         self.socialDist = socialDist
+        self.socialStrict = socialStrict
         self.moving = 0
         self.master = tkinter.Tk()
 
@@ -26,6 +27,7 @@ class Scene:
 
         self.buttonInit()
         self.textInit()
+        self.configInit()
 
         self.pplListMaker()
 
@@ -40,7 +42,9 @@ class Scene:
         self.closer.grid(row=3,column=1)
         self.infect = tkinter.Button(self.master, text="Infect", command=self.infection)
         self.infect.grid(row=4,column=1)
-        self.lastButtonRow = 4
+        self.infect = tkinter.Button(self.master, text="Distance!", command=self.commenceDistancing)
+        self.infect.grid(row=5,column=1)
+        self.lastButtonRow = 5
 
     def textInit(self):
         x = self.lastButtonRow-1
@@ -60,6 +64,14 @@ class Scene:
         self.deadText.grid(row=x+8,column=1)
         self.deadNum = tkinter.Label(self.master, text=0)
         self.deadNum.grid(row=x+9,column=1)
+        self.lastTextRow = 9
+
+    def configInit(self):
+        self.socialStrictVar = tkinter.StringVar()
+        self.socialStrictText = tkinter.Button(self.master, text="Social Distancing Strictness:", command=self.changeSocialStrict)
+        self.socialStrictText.grid(row=0,column=2)
+        self.socialStrictField = tkinter.Entry(self.master, textvariable=self.socialStrictVar)
+        self.socialStrictField.grid(row=1,column=2)
 
     def pplListMaker(self):
         self.canvas.delete("all")
@@ -71,6 +83,7 @@ class Scene:
             self.pplList.append(Person(self.canvas, self.width, self.height, socialDist=self.socialDist))
 
     def movement(self, times=1, mode=0):
+        self.allPplList = self.pplList + self.infectedPplList + self.recoveredPplList
         if mode == 0:
             for x in self.pplList:
                 magnitude = 10
@@ -153,11 +166,10 @@ class Scene:
         self.infectedNum.config(text=len(self.infectedPplList))
 
     def possibleCollision(self):
-        self.allPplList = self.pplList + self.infectedPplList + self.recoveredPplList
         for item in self.allPplList:
             for indx in range(self.allPplList.index(item)+1, len(self.allPplList)):
                 if item.distanceBetween(self.allPplList[indx])<=6*Person.radius:
-                    if item.rebelliousness + self.allPplList[indx].rebelliousness < 20:#bounce off
+                    if item.rebelliousness + self.allPplList[indx].rebelliousness < self.socialStrict and self.socialDist == 0:#bounce off
                         newAngle = item.lastMove[1]+radians(180)
                         choseAngle = newAngle
                         magnitude = 10
@@ -170,3 +182,10 @@ class Scene:
                     break
                     #else:
                         #don't course correct
+    def changeSocialStrict(self):
+        self.socialStrict = int(self.socialStrictVar.get())
+
+    def commenceDistancing(self):
+        self.socialDist = [1,0][self.socialDist]
+        for x in self.allPplList:
+            self.canvas.itemconfig(x.outerCircle, state=["normal","hidden"][self.socialDist])
