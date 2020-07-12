@@ -19,7 +19,11 @@ class Scene:
 
         self.canvas = tkinter.Canvas(self.master, width=width, height=height)
         self.canvas.grid(rowspan=height//10)
+        self.buttonInit()
 
+        self.pplListMaker()
+
+    def buttonInit(self):
         self.mover = tkinter.Button(self.master, text="Move", command=self.movement)
         self.mover.grid(row=0,column=1)
         self.moveChange = tkinter.Button(self.master, text="Start", command=self.changeMoving)
@@ -30,8 +34,6 @@ class Scene:
         self.closer.grid(row=3,column=1)
         self.infect = tkinter.Button(self.master, text="Infect", command=self.infection)
         self.infect.grid(row=4,column=1)
-
-        self.pplListMaker()
 
     def pplListMaker(self):
         self.canvas.delete("all")
@@ -53,7 +55,10 @@ class Scene:
                 curCoords = self.canvas.coords(x)
                 x.moveUpdate([coords[0]+x.x,coords[1]+x.y])
                 x.lastMove = [magnitude,choseAngle]
+        self.infectedMove(mode)
 
+    def infectedMove(self, mode):
+        if mode == 0:
             newlyInfected = []
             for x in self.infectedPplList:
                 magnitude = 10
