@@ -68,6 +68,7 @@ class Scene:
                 curCoords = self.canvas.coords(x)
                 x.moveUpdate([coords[0]+x.x,coords[1]+x.y])
                 x.lastMove = [magnitude,choseAngle]
+        self.possibleCollision()
         self.infectedMove(mode)
         self.recovery()
 
@@ -114,3 +115,22 @@ class Scene:
                 p.colorChange(self.canvas, 3)
                 self.infectedPplList.remove(p)
                 self.deadPplList.append(p)
+                
+    def possibleCollision(self):
+        self.allPplList = self.pplList + self.infectedPplList
+        indx = 0
+        for item in self.allPplList:
+            for indx in range(index(self.allPplList[item])+1, len(self.allPplList)):
+                if item.distanceBetween(self.allPplList(indx))<=6*Person.radius:
+                    if item.rebelliousness + self.allPplList(indx).rebelliousness < 6:#bounce off
+                        newAngle = x.lastMove[1]+radians(180)
+                        choseAngle = newAngle
+                        magnitude = 10
+                        coords = vectorToCoords(magnitude, choseAngle, self, x)
+                        self.canvas.move(x.dot, *coords)
+                        curCoords = self.canvas.coords(x)
+                        x.moveUpdate([coords[0]+x.x,coords[1]+x.y])
+                        x.lastMove = [magnitude,choseAngle]
+                    #else:
+                        #don't course correct
+            
