@@ -8,13 +8,9 @@ configFile.close()
 
 class Person:
     num = 0
-    radius = 5
-<<<<<<< HEAD
+    radius = 10
     exec(configText)
-    
-=======
-    colors = ["deepskyblue2","red3", "grey70"]
->>>>>>> 77a8aae327ad1819cdb3addf70c86572f6263ee9
+
     def __init__(self, can, xMax, yMax):
         self.x = random.randint(20,xMax-20)
         self.y = random.randint(20,yMax-20)
@@ -34,7 +30,6 @@ class Person:
         xDiff = abs(self.x-other.x)
         yDiff = abs(self.y-other.y)
         distBtwn = sqrt(xDiff**2 + yDiff**2)
-        print(distBtwn)
         return distBtwn
 
     def moveUpdate(self,coords):

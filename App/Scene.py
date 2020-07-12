@@ -40,12 +40,24 @@ class Scene:
         self.pplList = []
         self.infectedPplList = []
         self.deadPplList = []
+        self.recoveredPplList = []
         for x in range(self.pplCount):
             self.pplList.append(Person(self.canvas, self.width, self.height))
 
     def movement(self, times=1, mode=0):
         if mode == 0:
             for x in self.pplList:
+                magnitude = 10
+                angle = [radians(random.randint(0,360)), x.lastMove[1], x.lastMove[1], x.lastMove[1], x.lastMove[1], x.lastMove[1]]
+                choseAngle = random.choice(angle)
+
+                coords = vectorToCoords(magnitude, choseAngle, self, x)
+
+                self.canvas.move(x.dot, *coords)
+                curCoords = self.canvas.coords(x)
+                x.moveUpdate([coords[0]+x.x,coords[1]+x.y])
+                x.lastMove = [magnitude,choseAngle]
+            for x in self.recoveredPplList:
                 magnitude = 10
                 angle = [radians(random.randint(0,360)), x.lastMove[1], x.lastMove[1], x.lastMove[1], x.lastMove[1], x.lastMove[1]]
                 choseAngle = random.choice(angle)
@@ -87,20 +99,18 @@ class Scene:
     def infection(self):
         self.infectedPplList.append(Person(self.canvas, self.width, self.height))
         self.infectedPplList[-1].colorChange(self.canvas,1)
-        
-    def recovery(self)
+
+    def recovery(self):
         for p in self.infectedPplList:
-            if random.randint(0,10) == 0 or 1:
-                self.recoveryTime -= 1
+            if random.randint(0,99) in [0]:
+                p.recoveryTime -= 1
             else:
-                self.recoveryTime += 1
-            if self.recoveryTime > 14:
-                self.colorChange(self.canvas, 0)
-                self.health = 2
+                p.recoveryTime += 1
+            if p.recoveryTime > 15:
+                p.colorChange(self.canvas, 2)
                 self.infectedPplList.remove(p)
-                self.pplList.append(p)
-            elif self.recoveryTime == -1:
-                self.colorChange(self.canvas, 2)
-                self.health = 3
+                self.recoveredPplList.append(p)
+            elif p.recoveryTime == -1:
+                p.colorChange(self.canvas, 3)
                 self.infectedPplList.remove(p)
                 self.deadPplList.append(p)
