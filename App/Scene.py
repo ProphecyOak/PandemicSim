@@ -139,5 +139,6 @@ class Scene:
                         curCoords = self.canvas.coords(item)
                         item.moveUpdate([coords[0]+item.x,coords[1]+item.y])
                         item.lastMove = [magnitude,choseAngle]
+                    break
                     #else:
                         #don't course correct
