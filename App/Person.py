@@ -4,17 +4,19 @@ from math import *
 
 class Person:
     num = 0
+    radius = 5
+    colors = ["deepskyblue2","red3"]
     def __init__(self, can, xMax, yMax):
         self.x = random.randint(20,xMax-20)
         self.y = random.randint(20,yMax-20)
-        self.color = "green"
-        self.dot = can.create_oval(self.x-10, self.y-10, self.x+10, self.y+10, fill=self.color)
+        self.color = Person.colors[0]
+        self.dot = can.create_oval(self.x-Person.radius, self.y-Person.radius, self.x+Person.radius, self.y+Person.radius, fill=self.color)
         self.lastMove = [0,random.random()*360]
         self.health = 0 #0 is healthy, 1 is infected, and 2 is clear
         Person.num += 1
 
-    def colorChange(self, can, Grp):
-        self.color = ["green","red"][Grp]
+    def colorChange(self, can, Grp=1):
+        self.color = Person.colors[Grp]
         can.itemconfig(self.dot, fill=self.color)
         self.health = Grp
 

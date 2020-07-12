@@ -51,7 +51,6 @@ class Scene:
 
                 self.canvas.move(x.dot, *coords)
                 curCoords = self.canvas.coords(x)
-                print(curCoords)
                 x.moveUpdate([coords[0]+x.x,coords[1]+x.y])
                 x.lastMove = [magnitude,choseAngle]
 
@@ -67,7 +66,7 @@ class Scene:
                 x.moveUpdate([coords[0]+x.x,coords[1]+x.y])
                 x.lastMove = [magnitude,choseAngle]
                 for y in self.pplList:
-                    if x.distanceBetween(y) < 20:# and random.randint(0,100) < 90:
+                    if x.distanceBetween(y) < Person.radius*2:# and random.randint(0,100) < 90:
                         y.colorChange(self.canvas,1)
                         self.pplList.remove(y)
                         newlyInfected.append(y)

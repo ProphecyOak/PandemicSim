@@ -2,7 +2,7 @@ from Scene import *
 import random
 import time
 
-newScene = Scene(pplCount=20)
+newScene = Scene(pplCount=100)
 while True:
     if newScene.moving == 1:
         newScene.movement()
