@@ -3,13 +3,13 @@ from math import *
 
 
 configFile = open("config.txt")
-configText = configFile.read()
+configText = configFile.readlines()
 configFile.close()
 
 class Person:
     num = 0
-    radius = 10
-    exec(configText)
+    exec(configText[0])
+    exec(configText[1])
 
     def __init__(self, can, xMax, yMax):
         self.x = random.randint(20,xMax-20)

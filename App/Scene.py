@@ -1,4 +1,5 @@
 from Person import *
+from SideGraph import *
 from xtraFunctions import *
 import tkinter
 import random
@@ -19,6 +20,9 @@ class Scene:
 
         self.canvas = tkinter.Canvas(self.master, width=width, height=height)
         self.canvas.grid(rowspan=height//10)
+
+        self.sideGraph = SideGraph(self.master,height//10)
+
         self.buttonInit()
 
         self.pplListMaker()
@@ -70,6 +74,7 @@ class Scene:
                 x.lastMove = [magnitude,choseAngle]
         self.infectedMove(mode)
         self.recovery()
+        self.sideGraph.plotData(len(self.pplList),len(self.infectedPplList),len(self.recoveredPplList),len(self.deadPplList))
 
     def infectedMove(self, mode):
         if mode == 0:
