@@ -58,6 +58,7 @@ class Scene:
                 coords = vectorToCoords(magnitude, choseAngle, self, x)
 
                 self.canvas.move(x.dot, *coords)
+                self.canvas.move(x.outerCircle, *coords)
                 curCoords = self.canvas.coords(x)
                 x.moveUpdate([coords[0]+x.x,coords[1]+x.y])
                 x.lastMove = [magnitude,choseAngle]
@@ -69,6 +70,7 @@ class Scene:
                 coords = vectorToCoords(magnitude, choseAngle, self, x)
 
                 self.canvas.move(x.dot, *coords)
+                self.canvas.move(x.outerCircle, *coords)
                 curCoords = self.canvas.coords(x)
                 x.moveUpdate([coords[0]+x.x,coords[1]+x.y])
                 x.lastMove = [magnitude,choseAngle]
@@ -87,6 +89,7 @@ class Scene:
                 coords = vectorToCoords(magnitude, choseAngle, self, x)
 
                 self.canvas.move(x.dot, *coords)
+                self.canvas.move(x.outerCircle, *coords)
                 x.moveUpdate([coords[0]+x.x,coords[1]+x.y])
                 x.lastMove = [magnitude,choseAngle]
                 for y in self.pplList:

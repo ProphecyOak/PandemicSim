@@ -30,14 +30,14 @@ class SideGraph:
         startY = self.height-10
         endY = 10
         total = healthy + infected + recovered + dead
-        healthy = healthy/total
-        infected = infected/total
+        healthy = infected/total
+        infected = healthy/total
         recovered = recovered/total
         dead = dead/total
-        healthyY =(self.height-20)*healthy
-        infectedY =(self.height-20)*infected
-        recoveredY =(self.height-20)*recovered
-        print("\n"+str(healthy),infected,recovered,dead,"   ",total)
-        print(healthyY,infectedY,recoveredY,endY)
-        self.plotPoints.append([self.canvas.create_rectangle(startX,startY,endX,healthyY,fill=SideGraph.colors[0]), self.canvas.create_rectangle(startX, healthyY, endX, infectedY,fill=SideGraph.colors[1]), self.canvas.create_rectangle(startX, infectedY, endX, recoveredY,fill=SideGraph.colors[2]), self.canvas.create_rectangle(startX, recoveredY, endX, endY,fill=SideGraph.colors[3])])
+        healthyY = self.height-10-(self.height-20)*healthy
+        infectedY = healthyY-(self.height-20)*infected
+        recoveredY = infectedY-(self.height-20)*recovered
+        print("\n"+str(healthy)[:4],str(infected)[:4],str(recovered)[:4],str(dead)[:4],"   ",str(total)[:4])
+        print(str(healthyY)[:6],str(infectedY)[:6],str(recoveredY)[:6])
+        self.plotPoints.append([self.canvas.create_rectangle(startX,startY,endX,healthyY,fill=SideGraph.colors[1]), self.canvas.create_rectangle(startX, healthyY, endX, infectedY,fill=SideGraph.colors[0]), self.canvas.create_rectangle(startX, infectedY, endX, recoveredY,fill=SideGraph.colors[2]), self.canvas.create_rectangle(startX, recoveredY, endX, endY,fill=SideGraph.colors[3])])
         self.curX += 15

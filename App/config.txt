@@ -1,2 +1,3 @@
 colors = ["deepskyblue2","red3","grey70","grey15"]
 radius = 5
+lightColors = ["skyblue1","indianred3","grey82"]
