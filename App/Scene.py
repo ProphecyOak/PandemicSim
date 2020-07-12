@@ -6,7 +6,7 @@ import random
 
 
 class Scene:
-    def __init__(self, width=500, height=500, pplCount=50):
+    def __init__(self, width=500, height=500, pplCount=50,socialDist=0):
         if width < 50:
             width = 50
         self.width = width
@@ -15,6 +15,7 @@ class Scene:
         self.height = height
 
         self.pplCount = pplCount
+        self.socialDist = socialDist
         self.moving = 0
         self.master = tkinter.Tk()
 
@@ -24,6 +25,7 @@ class Scene:
         self.sideGraph = SideGraph(self.master,height//10)
 
         self.buttonInit()
+        self.textInit()
 
         self.pplListMaker()
 
@@ -38,6 +40,26 @@ class Scene:
         self.closer.grid(row=3,column=1)
         self.infect = tkinter.Button(self.master, text="Infect", command=self.infection)
         self.infect.grid(row=4,column=1)
+        self.lastButtonRow = 4
+
+    def textInit(self):
+        x = self.lastButtonRow-1
+        self.healthyText = tkinter.Label(self.master, text="Healthy:")
+        self.healthyText.grid(row=x+2,column=1)
+        self.healthyNum = tkinter.Label(self.master, text=self.pplCount)
+        self.healthyNum.grid(row=x+3,column=1)
+        self.infectedText = tkinter.Label(self.master, text="Infected:")
+        self.infectedText.grid(row=x+4,column=1)
+        self.infectedNum = tkinter.Label(self.master, text=0)
+        self.infectedNum.grid(row=x+5,column=1)
+        self.recoveredText = tkinter.Label(self.master, text="Recovered:")
+        self.recoveredText.grid(row=x+6,column=1)
+        self.recoveredNum = tkinter.Label(self.master, text=0)
+        self.recoveredNum.grid(row=x+7,column=1)
+        self.deadText = tkinter.Label(self.master, text="Dead:")
+        self.deadText.grid(row=x+8,column=1)
+        self.deadNum = tkinter.Label(self.master, text=0)
+        self.deadNum.grid(row=x+9,column=1)
 
     def pplListMaker(self):
         self.canvas.delete("all")
@@ -46,7 +68,7 @@ class Scene:
         self.deadPplList = []
         self.recoveredPplList = []
         for x in range(self.pplCount):
-            self.pplList.append(Person(self.canvas, self.width, self.height))
+            self.pplList.append(Person(self.canvas, self.width, self.height, socialDist=self.socialDist))
 
     def movement(self, times=1, mode=0):
         if mode == 0:
@@ -98,6 +120,9 @@ class Scene:
                         y.colorChange(self.canvas,1)
                         self.pplList.remove(y)
                         newlyInfected.append(y)
+            self.healthyNum.config(text=len(self.pplList))
+            self.infectedNum.config(text=len(self.infectedPplList))
+            self.deadNum.config(text=len(self.deadPplList))
             self.infectedPplList += newlyInfected
 
     def changeMoving(self):
@@ -106,13 +131,14 @@ class Scene:
         self.master.update()
 
     def infection(self):
-        self.infectedPplList.append(Person(self.canvas, self.width, self.height))
+        self.infectedPplList.append(Person(self.canvas, self.width, self.height, socialDist=self.socialDist))
+        self.infectedNum.config(text=len(self.infectedPplList))
         self.infectedPplList[-1].colorChange(self.canvas,1)
 
     def recovery(self):
         for p in self.infectedPplList:
             if random.randint(0,99) in [0]:
-                p.recoveryTime -= 1
+                p.recoveryTime -= 10
             else:
                 p.recoveryTime += 1
             if p.recoveryTime > 25:
@@ -123,6 +149,8 @@ class Scene:
                 p.colorChange(self.canvas, 3)
                 self.infectedPplList.remove(p)
                 self.deadPplList.append(p)
+        self.recoveredNum.config(text=len(self.recoveredPplList))
+        self.infectedNum.config(text=len(self.infectedPplList))
 
     def possibleCollision(self):
         self.allPplList = self.pplList + self.infectedPplList + self.recoveredPplList
