@@ -31,7 +31,12 @@ class Person:
         self.color = "Green"
         self.dot = can.create_oval(self.x-5, self.y-5, self.x+5, self.y+5, fill=self.color)
         self.lastMove = [0,random.random()*360]
+        self.health = 0
         Person.num += 1
+    def colorChange(can):
+        can.itemConfig(self.dot, fill = "Red")
+        self.color = "Red"
+        self.health = 1
 
 
 class Scene:
@@ -58,6 +63,8 @@ class Scene:
         self.reseter.grid(row=2,column=1)
         self.closer = tkinter.Button(self.master, text="Close", command=self.master.destroy)
         self.closer.grid(row=3,column=1)
+        self.infect = tkinter.Button(self.master, text="Infect", command=self.infection)
+        self.infect.grid(row=4,column=1)
 
         self.pplListMaker()
 
@@ -82,3 +89,7 @@ class Scene:
     def changeMoving(self):
         self.moving = [1,0][self.moving]
         self.moveChange.config(text=["Start","Stop"][self.moving])
+        
+    def infection(self):
+        self.pplList.append(Person(self.canvas, self.width, self.height))
+        self.pplList[-1].colorChange(self.canvas)
