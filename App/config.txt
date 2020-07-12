@@ -1,1 +1,2 @@
 colors = ["deepskyblue2","red3","grey70","grey15"]
+lightColors = ["SkyBlue1", "IndianRed3", "grey82"]
