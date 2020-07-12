@@ -2,10 +2,15 @@ import random
 from math import *
 
 
+configFile = open("config.txt")
+configText = configFile.read()
+configFile.close()
+
 class Person:
     num = 0
     radius = 5
-    colors = ["deepskyblue2","red3"]
+    exec(configText)
+    
     def __init__(self, can, xMax, yMax):
         self.x = random.randint(20,xMax-20)
         self.y = random.randint(20,yMax-20)
