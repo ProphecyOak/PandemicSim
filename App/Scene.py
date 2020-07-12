@@ -36,6 +36,7 @@ class Scene:
     def pplListMaker(self):
         self.canvas.delete("all")
         self.pplList = []
+        self.infectedPplList = []
         for x in range(self.pplCount):
             self.pplList.append(Person(self.canvas, self.width, self.height))
 
@@ -49,7 +50,26 @@ class Scene:
                 coords = vectorToCoords(magnitude, choseAngle, self, x)
 
                 self.canvas.move(x.dot, *coords)
+                x.moveUpdate(coords)
                 x.lastMove = [magnitude,choseAngle]
+
+            for x in self.infectedPplList:
+                magnitude = 10
+                angle = [radians(random.randint(0,360)), x.lastMove[1], x.lastMove[1], x.lastMove[1], x.lastMove[1], x.lastMove[1]]
+                choseAngle = random.choice(angle)
+
+                coords = vectorToCoords(magnitude, choseAngle, self, x)
+
+                self.canvas.move(x.dot, *coords)
+                x.moveUpdate(coords)
+                x.lastMove = [magnitude,choseAngle]
+                newlyInfected = []
+                for y in self.pplList:
+                    if x.distanceBetween(y) < 1:# and random.randint(0,100) < 90:
+                        y.colorChange(self.canvas,1)
+                        self.pplList.remove(y)
+                        newlyInfected.append(y)
+                self.infectedPplList += newlyInfected
 
     def changeMoving(self):
         self.moving = [1,0][self.moving]
@@ -57,5 +77,5 @@ class Scene:
         self.master.update()
 
     def infection(self):
-        self.pplList.append(Person(self.canvas, self.width, self.height))
-        self.pplList[-1].colorChange(self.canvas)
+        self.infectedPplList.append(Person(self.canvas, self.width, self.height))
+        self.infectedPplList[-1].colorChange(self.canvas,1)
