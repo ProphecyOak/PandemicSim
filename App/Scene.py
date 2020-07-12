@@ -39,6 +39,7 @@ class Scene:
         self.canvas.delete("all")
         self.pplList = []
         self.infectedPplList = []
+        self.deadPplList = []
         for x in range(self.pplCount):
             self.pplList.append(Person(self.canvas, self.width, self.height))
 
@@ -56,6 +57,7 @@ class Scene:
                 x.moveUpdate([coords[0]+x.x,coords[1]+x.y])
                 x.lastMove = [magnitude,choseAngle]
         self.infectedMove(mode)
+        self.recovery()
 
     def infectedMove(self, mode):
         if mode == 0:
@@ -85,3 +87,20 @@ class Scene:
     def infection(self):
         self.infectedPplList.append(Person(self.canvas, self.width, self.height))
         self.infectedPplList[-1].colorChange(self.canvas,1)
+        
+    def recovery(self)
+        for p in self.infectedPplList:
+            if random.randint(0,10) == 0 or 1:
+                self.recoveryTime -= 1
+            else:
+                self.recoveryTime += 1
+            if self.recoveryTime > 14:
+                self.colorChange(self.canvas, 0)
+                self.health = 2
+                self.infectedPplList.remove(p)
+                self.pplList.append(p)
+            elif self.recoveryTime == -1:
+                self.colorChange(self.canvas, 2)
+                self.health = 3
+                self.infectedPplList.remove(p)
+                self.deadPplList.append(p)
