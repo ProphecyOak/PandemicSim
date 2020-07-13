@@ -156,7 +156,7 @@ class Scene:
 
     def recovery(self):
         for p in self.infectedPplList:
-            if random.randint(1,1000*self.recoveryLength) in range(1:15):
+            if random.randint(1,1000*self.recoveryLength) in range(1,15):
                 p.colorChange(self.canvas, 3)
                 self.infectedPplList.remove(p)
                 self.deadPplList.append(p)
