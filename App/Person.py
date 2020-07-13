@@ -32,6 +32,9 @@ class Person:
         if Grp < 3:
             self.lightColor = Person.lightColors[Grp]
             can.itemconfig(self.outerCircle, outline=self.lightColor, width=2)
+        elif Grp > 3:
+            self.lightColor = Person.lightColors[Grp-1]
+            can.itemconfig(self.outerCircle, outline=self.lightColor, width=2)
         else:
             can.delete(self.outerCircle)
         self.health = Grp
