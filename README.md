@@ -16,4 +16,4 @@ User guide:
 
 Notes/Trivia:
 1. The colors and meanings are as follows: Healthy: Blue, Infected Symptomatic: Red, Infected Asymptomatic: Orange, Recovered: Gray, Dead: Black
-2. The strictness values are related to how "rebelious" each person is. People with higher rebelliousness are more likely to move when symptomatic and less likely to social distance effectively.
+2. The strictness values are related to how "rebellious" each person is. People with higher rebelliousness are more likely to move when symptomatic and less likely to social distance effectively.
