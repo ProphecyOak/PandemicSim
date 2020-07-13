@@ -86,6 +86,18 @@ class Scene:
         self.quarantineStrictField = tkinter.Entry(self.master, textvariable=self.quarantineStrictVar)
         self.quarantineStrictField.grid(row=3,column=2)
 
+        self.popSizeVar = tkinter.StringVar()
+        self.popSizeText = tkinter.Button(self.master, text="Population Size:", command=self.changePopSize)
+        self.popSizeText.grid(row=4,column=2)
+        self.popSizeField = tkinter.Entry(self.master, textvariable=self.popSizeVar)
+        self.popSizeField.grid(row=5,column=2)
+
+        self.radiusVar = tkinter.StringVar()
+        self.radiusText = tkinter.Button(self.master, text="Person Size:", command=self.changeRadius)
+        self.radiusText.grid(row=6,column=2)
+        self.radiusField = tkinter.Entry(self.master, textvariable=self.radiusVar)
+        self.radiusField.grid(row=7,column=2)
+
     def pplListMaker(self):
         self.canvas.delete("all")
         self.pplList = []
@@ -226,6 +238,12 @@ class Scene:
         self.socialStrict = int(self.socialStrictVar.get())
     def changeQuarantineStrict(self):
         self.quarantineStrict = int(self.quarantineStrictVar.get())
+    def changePopSize(self):
+        self.pplCount = int(self.popSizeVar.get())
+        self.pplListMaker()
+    def changeRadius(self):
+        Person.radius = int(self.radiusVar.get())
+        self.pplListMaker()
 
     def commenceDistancing(self):
         self.socialDist = [1,0][self.socialDist]
