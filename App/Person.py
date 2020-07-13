@@ -23,6 +23,7 @@ class Person:
         self.health = 0 #0 is healthy, 1 is infected, 2 is clear, and 3 is dead
         self.recoveryTime = 0
         self.rebelliousness = random.randint(0, 7)
+        self.symptomatic = 0
         Person.num += 1
 
     def colorChange(self, can, Grp=1):
