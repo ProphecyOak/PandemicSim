@@ -204,23 +204,23 @@ class Scene:
     def recovery(self):
         for p in self.infectedPplList:
             #if random.randint(1,1000*self.recoveryLength) in range(1,15) and p.susceptibility > 2:
-            if p.susceptibility == 0 and random.randint(1,1000000*self.recoveryLength) in range(1,17):
+            if p.susceptibility == 0 and random.randint(1,1000000*self.recoveryLength) in range(1,17*self.immunocompromisedMultiplier):
                 p.colorChange(self.canvas, 3)
                 self.infectedPplList.remove(p)
                 self.deadPplList.append(p)
-            elif p.susceptibility == 1 and random.randint(1,10000000*self.recoveryLength) in range(1,33):
+            elif p.susceptibility == 1 and random.randint(1,10000000*self.recoveryLength) in range(1,33*self.immunocompromisedMultiplier):
                 p.colorChange(self.canvas, 3)
                 self.infectedPplList.remove(p)
                 self.deadPplList.append(p)
-            elif p.susceptibility == 2 and random.randint(1,1000000*self.recoveryLength) in range(1,93):
+            elif p.susceptibility == 2 and random.randint(1,1000000*self.recoveryLength) in range(1,93*self.immunocompromisedMultiplier):
                 p.colorChange(self.canvas, 3)
                 self.infectedPplList.remove(p)
                 self.deadPplList.append(p)
-            elif p.susceptibility == 3 and random.randint(1,10000*self.recoveryLength) in range(1,15):
+            elif p.susceptibility == 3 and random.randint(1,10000*self.recoveryLength) in range(1,15*self.immunocompromisedMultiplier):
                 p.colorChange(self.canvas, 3)
                 self.infectedPplList.remove(p)
                 self.deadPplList.append(p)
-            elif p.susceptibility == 4 and random.randint(1,1000*self.recoveryLength) in range(1,56):
+            elif p.susceptibility == 4 and random.randint(1,1000*self.recoveryLength) in range(1,56*self.immunocompromisedMultiplier):
                 p.colorChange(self.canvas, 3)
                 self.infectedPplList.remove(p)
                 self.deadPplList.append(p)
