@@ -24,7 +24,11 @@ class Person:
         self.recoveryTime = 0
         self.rebelliousness = random.randint(0, 7)
         self.symptomatic = 0
-        probability = random.randint(1, 95)
+        self.immunocompromisedMultiplier = 1
+        immunocompromised = random.randint(1,100)
+        if immunocompromised in range(0,4):
+            self.immunocompromisedMultiplier = 12
+        probability = random.randint(1, 100)
         if probability <= 7:
             self.susceptibility = 0
         elif probability > 7 and probability <= 21:
@@ -33,8 +37,10 @@ class Person:
             self.susceptibility = 2
         elif probability > 62 and probability <= 82:
             self.susceptibility = 3
-        else:
+        elif probability > 82 and probability <= 95:
             self.susceptibility = 4
+        else:
+            self.susceptibility = 5
         Person.num += 1
 
     def colorChange(self, can, Grp=1):
