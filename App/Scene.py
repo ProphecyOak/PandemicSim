@@ -136,6 +136,7 @@ class Scene:
             newlyInfected = []
             for x in self.infectedPplList:
                 if x.symptomatic == 1:
+                    x.colorChange(self.canvas,4)
                     magnitude = 10
                     angle = [radians(random.randint(0,360)), x.lastMove[1], x.lastMove[1], x.lastMove[1], x.lastMove[1], x.lastMove[1]]
                     choseAngle = random.choice(angle)
