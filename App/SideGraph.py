@@ -18,7 +18,7 @@ class SideGraph:
         self.plotPoints = []
         self.end = 0
     def plotData(self, healthy, infected, recovered, dead):
-        barWidth = 5
+        barWidth = 10
         spacing = 2
         if self.curX > self.width or self.end == 1:
             for x in self.plotPoints[0]:
@@ -28,7 +28,7 @@ class SideGraph:
                     self.canvas.move(y,-barWidth-spacing,0)
             self.plotPoints.pop(0)
             if self.end != 1:
-                self.curX = self.width-barWidth*2
+                self.curX = self.width-barWidth
                 self.end = 1
         startX = self.curX
         endX = self.curX + barWidth

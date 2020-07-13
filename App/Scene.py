@@ -119,25 +119,30 @@ class Scene:
         if mode == 0:
             newlyInfected = []
             for x in self.infectedPplList:
-                magnitude = 10
-                angle = [radians(random.randint(0,360)), x.lastMove[1], x.lastMove[1], x.lastMove[1], x.lastMove[1], x.lastMove[1]]
-                choseAngle = random.choice(angle)
+                if x.symptomatic == 1:
+                    magnitude = 10
+                    angle = [radians(random.randint(0,360)), x.lastMove[1], x.lastMove[1], x.lastMove[1], x.lastMove[1], x.lastMove[1]]
+                    choseAngle = random.choice(angle)
 
-                coords = vectorToCoords(magnitude, choseAngle, self, x)
+                    coords = vectorToCoords(magnitude, choseAngle, self, x)
 
-                self.canvas.move(x.dot, *coords)
-                self.canvas.move(x.outerCircle, *coords)
-                x.moveUpdate([coords[0]+x.x,coords[1]+x.y])
-                x.lastMove = [magnitude,choseAngle]
+                    self.canvas.move(x.dot, *coords)
+                    self.canvas.move(x.outerCircle, *coords)
+                    x.moveUpdate([coords[0]+x.x,coords[1]+x.y])
+                    x.lastMove = [magnitude,choseAngle]
+                elif x.symptomatic == 0:
+                    pass#symptomatic behavior
                 for y in self.pplList:
                     if x.distanceBetween(y) < Person.radius*2:# and random.randint(0,100) < 90:
                         y.colorChange(self.canvas,1)
                         self.pplList.remove(y)
+                        if random.random() <= .35:
+                            y.symptomatic = 1
                         newlyInfected.append(y)
+            self.infectedPplList += newlyInfected
             self.healthyNum.config(text=len(self.pplList))
             self.infectedNum.config(text=len(self.infectedPplList))
             self.deadNum.config(text=len(self.deadPplList))
-            self.infectedPplList += newlyInfected
 
     def changeMoving(self):
         self.moving = [1,0][self.moving]
@@ -151,7 +156,7 @@ class Scene:
 
     def recovery(self):
         for p in self.infectedPplList:
-            if random.randint(1,100*self.recoveryLength) in [1]:
+            if random.randint(1,1000*self.recoveryLength) in range(1:15):
                 p.colorChange(self.canvas, 3)
                 self.infectedPplList.remove(p)
                 self.deadPplList.append(p)
