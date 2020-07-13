@@ -3,8 +3,7 @@ import random
 import time
 
 
-newScene = Scene(pplCount=20)
-
+newScene = Scene(pplCount=500,socialDist=1)
 while True:
     if newScene.moving == 1:
         newScene.movement()

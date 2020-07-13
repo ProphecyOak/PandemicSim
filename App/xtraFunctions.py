@@ -1,18 +1,25 @@
 from math import *
 
 
+configFile = open("config.txt")
+configText = configFile.readlines()
+configFile.close()
+exec(configText[1])
+
 def vectorToCoords(magnitude, angle, scene, dot):
-    curCoords = scene.canvas.coords(dot.dot)
+    global radiius
+
+    curCoords = [dot.x,dot.y]
     deltCoords = []
-    if curCoords[0] < 20:
+    if curCoords[0] < radius*3:
         deltCoords.append(magnitude)
-    elif curCoords[0] > scene.width-20:
+    elif curCoords[0] > scene.width-radius*3:
         deltCoords.append(-magnitude)
     else:
         deltCoords.append(magnitude*cos(angle))
-    if curCoords[1] < 20:
+    if curCoords[1] < radius*3:
         deltCoords.append(magnitude)
-    elif curCoords[1] > scene.height-20:
+    elif curCoords[1] > scene.height-radius*3:
         deltCoords.append(-magnitude)
     else:
         deltCoords.append(magnitude*sin(angle))
