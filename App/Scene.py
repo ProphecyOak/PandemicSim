@@ -21,6 +21,7 @@ class Scene:
         self.moving = 0
         self.master = tkinter.Tk()
         self.recoveryLength = 25
+        self.moveCount = -1
 
         self.canvas = tkinter.Canvas(self.master, width=width, height=height)
         self.canvas.grid(rowspan=height//10)
@@ -66,7 +67,11 @@ class Scene:
         self.deadText.grid(row=x+8,column=1)
         self.deadNum = tkinter.Label(self.master, text=0)
         self.deadNum.grid(row=x+9,column=1)
-        self.lastTextRow = 9
+        self.moveText = tkinter.Label(self.master, text="Moves:")
+        self.moveText.grid(row=x+10,column=1)
+        self.moveNum = tkinter.Label(self.master, text=0)
+        self.moveNum.grid(row=x+11,column=1)
+        self.lastTextRow = 11
 
     def configInit(self):
         self.socialStrictVar = tkinter.StringVar()
@@ -89,6 +94,8 @@ class Scene:
         self.recoveredPplList = []
         for x in range(self.pplCount):
             self.pplList.append(Person(self.canvas, self.width, self.height, socialDist=self.socialDist))
+        self.moveCount = -1
+        self.movement()
 
     def movement(self, times=1, mode=0):
         self.allPplList = self.pplList + self.infectedPplList + self.recoveredPplList
@@ -121,6 +128,8 @@ class Scene:
         self.infectedMove(mode)
         self.recovery()
         self.sideGraph.plotData(len(self.pplList),len(self.infectedPplList),len(self.recoveredPplList),len(self.deadPplList))
+        self.moveCount += 1
+        self.moveNum.config(text=self.moveCount)
 
     def infectedMove(self, mode):
         if mode == 0:
@@ -215,7 +224,7 @@ class Scene:
     def changeSocialStrict(self):
         self.socialStrict = int(self.socialStrictVar.get())
     def changeQuarantineStrict(self):
-        self.socialStrict = int(self.quarantineStrictVar.get())
+        self.quarantineStrict = int(self.quarantineStrictVar.get())
 
     def commenceDistancing(self):
         self.socialDist = [1,0][self.socialDist]
