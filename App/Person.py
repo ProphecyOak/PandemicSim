@@ -17,7 +17,7 @@ class Person:
         self.y = random.randint(20,yMax-20)
         self.color = Person.colors[0]
         self.lightColor = Person.lightColors[0]
-        self.dot = can.create_oval(self.x-Person.radius, self.y-Person.radius, self.x+Person.radius, self.y+Person.radius, fill=self.color)
+        self.dot = can.create_oval(self.x-Person.radius, self.y-Person.radius, self.x+Person.radius, self.y+Person.radius, fill=self.color, outline="")
         self.outerCircle = can.create_oval(self.x-Person.radius*3, self.y-Person.radius*3, self.x+Person.radius*3, self.y+Person.radius*3, outline = self.lightColor, width=2, state=["normal","hidden"][socialDist])
         self.lastMove = [0,random.random()*360]
         self.health = 0 #0 is healthy, 1 is infected, 2 is clear, and 3 is dead
