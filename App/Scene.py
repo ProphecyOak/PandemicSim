@@ -130,15 +130,15 @@ class Scene:
                     self.canvas.move(x.outerCircle, *coords)
                     x.moveUpdate([coords[0]+x.x,coords[1]+x.y])
                     x.lastMove = [magnitude,choseAngle]
-                elif x.symptomatic == 0:
-                    pass#symptomatic behavior
-                for y in self.pplList:
+                    for y in self.pplList:
                     if x.distanceBetween(y) < Person.radius*2:# and random.randint(0,100) < 90:
                         y.colorChange(self.canvas,1)
                         self.pplList.remove(y)
                         if random.random() <= .35:
                             y.symptomatic = 1
                         newlyInfected.append(y)
+                elif x.symptomatic == 0:
+                    pass#symptomatic behavior
             self.infectedPplList += newlyInfected
             self.healthyNum.config(text=len(self.pplList))
             self.infectedNum.config(text=len(self.infectedPplList))
@@ -156,7 +156,7 @@ class Scene:
 
     def recovery(self):
         for p in self.infectedPplList:
-            if random.randint(1,1000*self.recoveryLength) in range(1,15):
+            if random.randint(1,1000*self.recoveryLength) in range(1:15):
                 p.colorChange(self.canvas, 3)
                 self.infectedPplList.remove(p)
                 self.deadPplList.append(p)
