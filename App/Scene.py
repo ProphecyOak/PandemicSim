@@ -19,6 +19,7 @@ class Scene:
         self.socialStrict = socialStrict
         self.moving = 0
         self.master = tkinter.Tk()
+        self.recoveryLength = 25
 
         self.canvas = tkinter.Canvas(self.master, width=width, height=height)
         self.canvas.grid(rowspan=height//10)
@@ -150,18 +151,16 @@ class Scene:
 
     def recovery(self):
         for p in self.infectedPplList:
-            if random.randint(0,99) in [0]:
-                p.recoveryTime -= 10
-            else:
-                p.recoveryTime += 1
-            if p.recoveryTime > 25:
-                p.colorChange(self.canvas, 2)
-                self.infectedPplList.remove(p)
-                self.recoveredPplList.append(p)
-            elif p.recoveryTime == -1:
+            if random.randint(1,100*self.recoveryLength) in [1]:
                 p.colorChange(self.canvas, 3)
                 self.infectedPplList.remove(p)
                 self.deadPplList.append(p)
+            else:
+                p.recoveryTime += 1
+            if p.recoveryTime > self.recoveryLength:
+                p.colorChange(self.canvas, 2)
+                self.infectedPplList.remove(p)
+                self.recoveredPplList.append(p)
         self.recoveredNum.config(text=len(self.recoveredPplList))
         self.infectedNum.config(text=len(self.infectedPplList))
 
