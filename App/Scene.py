@@ -6,7 +6,7 @@ import random
 
 
 class Scene:
-    def __init__(self, width=500, height=500, pplCount=50, socialDist=0, socialStrict=8):
+    def __init__(self, width=500, height=500, pplCount=50, socialDist=0, socialStrict=8, quarantineStrict=3):
         if width < 50:
             width = 50
         self.width = width
@@ -17,6 +17,7 @@ class Scene:
         self.pplCount = pplCount
         self.socialDist = socialDist
         self.socialStrict = socialStrict
+        self.quarantineStrict = quarantineStrict
         self.moving = 0
         self.master = tkinter.Tk()
         self.recoveryLength = 25
@@ -73,6 +74,12 @@ class Scene:
         self.socialStrictText.grid(row=0,column=2)
         self.socialStrictField = tkinter.Entry(self.master, textvariable=self.socialStrictVar)
         self.socialStrictField.grid(row=1,column=2)
+
+        self.quarantineStrictVar = tkinter.StringVar()
+        self.quarantineStrictText = tkinter.Button(self.master, text="Quarantine Strictness:", command=self.changeQuarantineStrict)
+        self.quarantineStrictText.grid(row=2,column=2)
+        self.quarantineStrictField = tkinter.Entry(self.master, textvariable=self.quarantineStrictVar)
+        self.quarantineStrictField.grid(row=3,column=2)
 
     def pplListMaker(self):
         self.canvas.delete("all")
@@ -131,14 +138,31 @@ class Scene:
                     x.moveUpdate([coords[0]+x.x,coords[1]+x.y])
                     x.lastMove = [magnitude,choseAngle]
                     for y in self.pplList:
-                    if x.distanceBetween(y) < Person.radius*2:# and random.randint(0,100) < 90:
-                        y.colorChange(self.canvas,1)
-                        self.pplList.remove(y)
-                        if random.random() <= .35:
-                            y.symptomatic = 1
-                        newlyInfected.append(y)
+                        if x.distanceBetween(y) < Person.radius*2:# and random.randint(0,100) < 90:
+                            y.colorChange(self.canvas,1)
+                            self.pplList.remove(y)
+                            if random.random() <= .35:
+                                y.symptomatic = 1
+                            newlyInfected.append(y)
                 elif x.symptomatic == 0:
-                    pass#symptomatic behavior
+                    if x.rebelliousness > self.quarantineStrict:
+                        magnitude = x.rebelliousness
+                        angle = [radians(random.randint(0,360)), x.lastMove[1], x.lastMove[1], x.lastMove[1], x.lastMove[1], x.lastMove[1]]
+                        choseAngle = random.choice(angle)
+
+                        coords = vectorToCoords(magnitude, choseAngle, self, x)
+
+                        self.canvas.move(x.dot, *coords)
+                        self.canvas.move(x.outerCircle, *coords)
+                        x.moveUpdate([coords[0]+x.x,coords[1]+x.y])
+                        x.lastMove = [magnitude,choseAngle]
+                        for y in self.pplList:
+                            if x.distanceBetween(y) < Person.radius*2:# and random.randint(0,100) < 90:
+                                y.colorChange(self.canvas,1)
+                                self.pplList.remove(y)
+                                if random.random() <= .35:
+                                    y.symptomatic = 1
+                                newlyInfected.append(y)
             self.infectedPplList += newlyInfected
             self.healthyNum.config(text=len(self.pplList))
             self.infectedNum.config(text=len(self.infectedPplList))
@@ -153,10 +177,11 @@ class Scene:
         self.infectedPplList.append(Person(self.canvas, self.width, self.height, socialDist=self.socialDist))
         self.infectedNum.config(text=len(self.infectedPplList))
         self.infectedPplList[-1].colorChange(self.canvas,1)
+        self.infectedPplList[-1].symptomatic = 1
 
     def recovery(self):
         for p in self.infectedPplList:
-            if random.randint(1,1000*self.recoveryLength) in range(1:15):
+            if random.randint(1,1000*self.recoveryLength) in range(1,15):
                 p.colorChange(self.canvas, 3)
                 self.infectedPplList.remove(p)
                 self.deadPplList.append(p)
@@ -186,8 +211,11 @@ class Scene:
                     break
                     #else:
                         #don't course correct
+
     def changeSocialStrict(self):
         self.socialStrict = int(self.socialStrictVar.get())
+    def changeQuarantineStrict(self):
+        self.socialStrict = int(self.quarantineStrictVar.get())
 
     def commenceDistancing(self):
         self.socialDist = [1,0][self.socialDist]
