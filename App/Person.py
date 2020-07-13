@@ -24,6 +24,7 @@ class Person:
         self.recoveryTime = 0
         self.rebelliousness = random.randint(0, 7)
         self.symptomatic = 0
+        self.susceptibility = random.randint(0,5)#basically, 5 age groups
         Person.num += 1
 
     def colorChange(self, can, Grp=1):
