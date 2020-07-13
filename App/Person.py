@@ -24,7 +24,17 @@ class Person:
         self.recoveryTime = 0
         self.rebelliousness = random.randint(0, 7)
         self.symptomatic = 0
-        self.susceptibility = random.randint(0,5)#basically, 5 age groups
+        probability = random.randint(1, 95)
+        if probability <= 7:
+            self.susceptibility = 0
+        elif probability > 7 and probability <= 21:
+            self.susceptibility = 1
+        elif probability > 21 and probability <= 62:
+            self.susceptibility = 2
+        elif probability > 62 and probability <= 82:
+            self.susceptibility = 3
+        else:
+            self.susceptibility = 4
         Person.num += 1
 
     def colorChange(self, can, Grp=1):
