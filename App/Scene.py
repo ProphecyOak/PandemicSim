@@ -5,7 +5,12 @@ import tkinter
 import random
 
 
+configFile = open("config.txt")
+configText = configFile.readlines()
+configFile.close()
+
 class Scene:
+    exec(configText[3])
     def __init__(self, width=500, height=500, pplCount=50, socialDist=0, socialStrict=8, quarantineStrict=3):
         if width < 50:
             width = 50
@@ -20,13 +25,16 @@ class Scene:
         self.quarantineStrict = quarantineStrict
         self.moving = 0
         self.master = tkinter.Tk()
+        self.master.configure(bg=Scene.backColor[1])
         self.recoveryLength = 25
         self.moveCount = -1
 
-        self.canvas = tkinter.Canvas(self.master, width=width, height=height)
+        self.canvas = tkinter.Canvas(self.master, width=width, height=height, bg=Scene.backColor[0], highlightbackground=Scene.backColor[3])
         self.canvas.grid(rowspan=height//10)
+        self.spacer = tkinter.Label(self.master,bg=Scene.backColor[1], fg=Scene.backColor[2])
+        self.spacer.grid(row=height//10,column=0)
 
-        self.sideGraph = SideGraph(self.master,height//10)
+        self.sideGraph = SideGraph(self.master,height//10+1)
 
         self.buttonInit()
         self.textInit()
@@ -35,56 +43,68 @@ class Scene:
         self.pplListMaker()
 
     def buttonInit(self):
-        self.mover = tkinter.Button(self.master, text="Move", command=self.movement)
+        self.mover = tkinter.Button(self.master, text="Move", command=self.movement, bg=Scene.backColor[1], fg=Scene.backColor[2])
         self.mover.grid(row=0,column=1)
-        self.moveChange = tkinter.Button(self.master, text="Start", command=self.changeMoving)
+        self.moveChange = tkinter.Button(self.master, text="Start", command=self.changeMoving, bg=Scene.backColor[1], fg=Scene.backColor[2])
         self.moveChange.grid(row=1,column=1)
-        self.reseter = tkinter.Button(self.master, text="Reset", command=self.pplListMaker)
+        self.reseter = tkinter.Button(self.master, text="Reset", command=self.pplListMaker, bg=Scene.backColor[1], fg=Scene.backColor[2])
         self.reseter.grid(row=2,column=1)
-        self.closer = tkinter.Button(self.master, text="Close", command=self.master.destroy)
+        self.closer = tkinter.Button(self.master, text="Close", command=self.master.destroy, bg=Scene.backColor[1], fg=Scene.backColor[2])
         self.closer.grid(row=3,column=1)
-        self.infect = tkinter.Button(self.master, text="Infect", command=self.infection)
+        self.infect = tkinter.Button(self.master, text="Infect", command=self.infection, bg=Scene.backColor[1], fg=Scene.backColor[2])
         self.infect.grid(row=4,column=1)
-        self.infect = tkinter.Button(self.master, text="Distance!", command=self.commenceDistancing)
+        self.infect = tkinter.Button(self.master, text="Distance!", command=self.commenceDistancing, bg=Scene.backColor[1], fg=Scene.backColor[2])
         self.infect.grid(row=5,column=1)
         self.lastButtonRow = 5
 
     def textInit(self):
         x = self.lastButtonRow-1
-        self.healthyText = tkinter.Label(self.master, text="Healthy:")
+        self.healthyText = tkinter.Label(self.master, text="Healthy:", bg=Scene.backColor[1], fg=Scene.backColor[2])
         self.healthyText.grid(row=x+2,column=1)
-        self.healthyNum = tkinter.Label(self.master, text=self.pplCount)
+        self.healthyNum = tkinter.Label(self.master, text=self.pplCount, bg=Scene.backColor[1], fg=Scene.backColor[2])
         self.healthyNum.grid(row=x+3,column=1)
-        self.infectedText = tkinter.Label(self.master, text="Infected:")
+        self.infectedText = tkinter.Label(self.master, text="Infected:", bg=Scene.backColor[1], fg=Scene.backColor[2])
         self.infectedText.grid(row=x+4,column=1)
-        self.infectedNum = tkinter.Label(self.master, text=0)
+        self.infectedNum = tkinter.Label(self.master, text=0, bg=Scene.backColor[1], fg=Scene.backColor[2])
         self.infectedNum.grid(row=x+5,column=1)
-        self.recoveredText = tkinter.Label(self.master, text="Recovered:")
+        self.recoveredText = tkinter.Label(self.master, text="Recovered:", bg=Scene.backColor[1], fg=Scene.backColor[2])
         self.recoveredText.grid(row=x+6,column=1)
-        self.recoveredNum = tkinter.Label(self.master, text=0)
+        self.recoveredNum = tkinter.Label(self.master, text=0, bg=Scene.backColor[1], fg=Scene.backColor[2])
         self.recoveredNum.grid(row=x+7,column=1)
-        self.deadText = tkinter.Label(self.master, text="Dead:")
+        self.deadText = tkinter.Label(self.master, text="Dead:", bg=Scene.backColor[1], fg=Scene.backColor[2])
         self.deadText.grid(row=x+8,column=1)
-        self.deadNum = tkinter.Label(self.master, text=0)
+        self.deadNum = tkinter.Label(self.master, text=0, bg=Scene.backColor[1], fg=Scene.backColor[2])
         self.deadNum.grid(row=x+9,column=1)
-        self.moveText = tkinter.Label(self.master, text="Moves:")
+        self.moveText = tkinter.Label(self.master, text="Moves:", bg=Scene.backColor[1], fg=Scene.backColor[2])
         self.moveText.grid(row=x+10,column=1)
-        self.moveNum = tkinter.Label(self.master, text=0)
+        self.moveNum = tkinter.Label(self.master, text=0, bg=Scene.backColor[1], fg=Scene.backColor[2])
         self.moveNum.grid(row=x+11,column=1)
         self.lastTextRow = 11
 
     def configInit(self):
         self.socialStrictVar = tkinter.StringVar()
-        self.socialStrictText = tkinter.Button(self.master, text="Social Distancing Strictness:", command=self.changeSocialStrict)
+        self.socialStrictText = tkinter.Button(self.master, text="Social Distancing Strictness:", command=self.changeSocialStrict, bg=Scene.backColor[1], fg=Scene.backColor[2])
         self.socialStrictText.grid(row=0,column=2)
-        self.socialStrictField = tkinter.Entry(self.master, textvariable=self.socialStrictVar)
+        self.socialStrictField = tkinter.Entry(self.master, textvariable=self.socialStrictVar, bg=Scene.backColor[1], fg=Scene.backColor[2])
         self.socialStrictField.grid(row=1,column=2)
 
         self.quarantineStrictVar = tkinter.StringVar()
-        self.quarantineStrictText = tkinter.Button(self.master, text="Quarantine Strictness:", command=self.changeQuarantineStrict)
+        self.quarantineStrictText = tkinter.Button(self.master, text="Quarantine Strictness:", command=self.changeQuarantineStrict, bg=Scene.backColor[1], fg=Scene.backColor[2])
         self.quarantineStrictText.grid(row=2,column=2)
-        self.quarantineStrictField = tkinter.Entry(self.master, textvariable=self.quarantineStrictVar)
+        self.quarantineStrictField = tkinter.Entry(self.master, textvariable=self.quarantineStrictVar, bg=Scene.backColor[1], fg=Scene.backColor[2])
         self.quarantineStrictField.grid(row=3,column=2)
+
+        self.popSizeVar = tkinter.StringVar()
+        self.popSizeText = tkinter.Button(self.master, text="Population Size:", command=self.changePopSize, bg=Scene.backColor[1], fg=Scene.backColor[2])
+        self.popSizeText.grid(row=4,column=2)
+        self.popSizeField = tkinter.Entry(self.master, textvariable=self.popSizeVar, bg=Scene.backColor[1], fg=Scene.backColor[2])
+        self.popSizeField.grid(row=5,column=2)
+
+        self.radiusVar = tkinter.StringVar()
+        self.radiusText = tkinter.Button(self.master, text="Person Size:", command=self.changeRadius, bg=Scene.backColor[1], fg=Scene.backColor[2])
+        self.radiusText.grid(row=6,column=2)
+        self.radiusField = tkinter.Entry(self.master, textvariable=self.radiusVar, bg=Scene.backColor[1], fg=Scene.backColor[2])
+        self.radiusField.grid(row=7,column=2)
 
     def pplListMaker(self):
         self.canvas.delete("all")
@@ -191,7 +211,24 @@ class Scene:
 
     def recovery(self):
         for p in self.infectedPplList:
-            if random.randint(1,1000*self.recoveryLength) in range(1,15):
+            #if random.randint(1,1000*self.recoveryLength) in range(1,15) and p.susceptibility > 2:
+            if p.susceptibility == 0 and random.randint(1,1000000*self.recoveryLength) in range(1,17*p.immunocompromisedMultiplier):
+                p.colorChange(self.canvas, 3)
+                self.infectedPplList.remove(p)
+                self.deadPplList.append(p)
+            elif p.susceptibility == 1 and random.randint(1,10000000*self.recoveryLength) in range(1,33*p.immunocompromisedMultiplier):
+                p.colorChange(self.canvas, 3)
+                self.infectedPplList.remove(p)
+                self.deadPplList.append(p)
+            elif p.susceptibility == 2 and random.randint(1,1000000*self.recoveryLength) in range(1,93*p.immunocompromisedMultiplier):
+                p.colorChange(self.canvas, 3)
+                self.infectedPplList.remove(p)
+                self.deadPplList.append(p)
+            elif p.susceptibility == 3 and random.randint(1,10000*self.recoveryLength) in range(1,15*p.immunocompromisedMultiplier):
+                p.colorChange(self.canvas, 3)
+                self.infectedPplList.remove(p)
+                self.deadPplList.append(p)
+            elif p.susceptibility == 4 and random.randint(1,1000*self.recoveryLength) in range(1,56*p.immunocompromisedMultiplier):
                 p.colorChange(self.canvas, 3)
                 self.infectedPplList.remove(p)
                 self.deadPplList.append(p)
@@ -226,6 +263,12 @@ class Scene:
         self.socialStrict = int(self.socialStrictVar.get())
     def changeQuarantineStrict(self):
         self.quarantineStrict = int(self.quarantineStrictVar.get())
+    def changePopSize(self):
+        self.pplCount = int(self.popSizeVar.get())
+        self.pplListMaker()
+    def changeRadius(self):
+        Person.radius = int(self.radiusVar.get())
+        self.pplListMaker()
 
     def commenceDistancing(self):
         self.socialDist = [1,0][self.socialDist]
